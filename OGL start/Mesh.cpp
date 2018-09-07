@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 using std::vector;
+using std::string;
 Mesh::Mesh(
 	vector<Vertex> vertices, 
 	vector<unsigned int> indices, 
@@ -15,6 +16,27 @@ Mesh::Mesh(
 
 void Mesh::Draw(Shader & shader)
 {
+	unsigned int diffID = 1;
+	unsigned int specID = 1;
+	for (size_t i = 0; i < textures.size(); ++i) {
+		Texture& tex = textures[i];
+		glActiveTexture(GL_TEXTURE0 + i);
+		string num;
+		string name = tex.type;
+		if (name == "texture_diffuse") {
+			num = std::to_string(diffID++);
+		}
+		else if (name == "texture_specular") {
+			num = std::to_string(specID++);
+		}
+		shader.setFloat("material." + name + num, i);
+		glBindTexture(GL_TEXTURE_2D, tex.ID);
+	}
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
 void Mesh::setupMesh()
