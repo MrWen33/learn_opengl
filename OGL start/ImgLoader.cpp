@@ -10,7 +10,7 @@ bool ImgLoader::IsValid()
 ImgLoader::ImgLoader(std::string img_path)
 {
 	stbi_set_flip_vertically_on_load(true);
-	data = stbi_load(img_path.c_str(), &width, &height, &nrChannels, 0);
+	data = stbi_load(img_path.c_str(), &width, &height, &nrChannels, STBI_rgb_alpha);
 	isValid = true;
 }
 

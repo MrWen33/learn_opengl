@@ -143,6 +143,7 @@
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="ImgLoader.h" />
     <ClInclude Include="utils.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaderfile\lightShader.fs" />

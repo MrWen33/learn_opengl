@@ -13,6 +13,7 @@ void Model::Draw(Shader & shader)
 }
 void Model::load_model(string path)
 {
+	cout << "starting load model..." << endl;
 	Assimp::Importer importer;
 	const aiScene *scene = importer.ReadFile(path, 
 		aiProcess_Triangulate|aiProcess_FlipUVs|
@@ -25,6 +26,7 @@ void Model::load_model(string path)
 	directory = path.substr(0, path.find_last_of('/'));
 
 	process_node(scene->mRootNode, scene);
+	cout << "model load finished." << endl;
 }
 
 void Model::process_node(aiNode * node, const aiScene * scene)
@@ -43,7 +45,7 @@ Mesh Model::process_mesh(aiMesh * mesh, const aiScene * scene)
 	vector<Vertex> vertices;
 	vector<unsigned int> indices;
 	vector<Texture> textures;
-
+	cout << "loading vertices("<< mesh->mNumVertices <<") and normals..." << endl;
 	for (size_t i = 0; i < mesh->mNumVertices; ++i) {
 		Vertex vertex;
 		auto& pos_info = mesh->mVertices[i];
@@ -59,7 +61,8 @@ Mesh Model::process_mesh(aiMesh * mesh, const aiScene * scene)
 		}
 		vertices.push_back(vertex);
 	}
-	
+
+	cout << "loading face indices("<< mesh->mNumFaces <<") .." << endl;
 	for (size_t i = 0; i < mesh->mNumFaces; ++i) {
 		auto& face = mesh->mFaces[i];
 		for (size_t j = 0; j < face.mNumIndices; ++j) {
@@ -67,6 +70,7 @@ Mesh Model::process_mesh(aiMesh * mesh, const aiScene * scene)
 		}
 	}
 
+	cout << "loading materials("<< mesh->mMaterialIndex <<") .." << endl;
 	if (mesh->mMaterialIndex >= 0) {
 		aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 		auto diffuse_maps = load_material_textures(material, aiTextureType_DIFFUSE, "texture_diffuse");
@@ -74,7 +78,7 @@ Mesh Model::process_mesh(aiMesh * mesh, const aiScene * scene)
 		auto spec_maps = load_material_textures(material, aiTextureType_SPECULAR, "texture_specular");
 		textures.insert(textures.end(), spec_maps.begin(), spec_maps.end());
 	}
-
+	return Mesh(vertices, indices, textures);
 }
 
 vector<Texture> Model::load_material_textures(aiMaterial * material, aiTextureType type, std::string typeName)
@@ -83,13 +87,29 @@ vector<Texture> Model::load_material_textures(aiMaterial * material, aiTextureTy
 	for (size_t i = 0; i < material->GetTextureCount(type); ++i) {
 		aiString str;
 		material->GetTexture(type, i, &str);
+
+		if (is_loaded(string(str.C_Str()))) {
+			continue;
+		}
+
 		Texture texture;
 
-		texture.ID = loadMaterial(directory + string(str.C_Str()));
+		cout <<"loading:"<< directory + '/' + string(str.C_Str()) << endl;
+		texture.ID = loadMaterial(directory + '/' + string(str.C_Str()));
 		texture.type = typeName;
 		texture.path = string(str.C_Str());
 		textures.push_back(texture);
-
+		textures_loaded.push_back(texture);
 	}
 	return textures;
+}
+
+bool Model::is_loaded(const string & texture_path)
+{
+	for (auto& texture_loaded : textures_loaded) {
+		if (std::strcmp(texture_loaded.path.c_str(), texture_path.c_str()) == 0) {
+			return true;
+		}
+	}
+	return false;
 }
