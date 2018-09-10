@@ -17,7 +17,10 @@
 #include"Camera.h"
 using std::string;
 
-GLFWwindow* openglInit(string name, int wid, int height, GLFWframebuffersizefun callback) {
+Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+float deltaTime = 0.f;
+
+GLFWwindow* openglInit(string name, int wid, int height, GLFWframebuffersizefun kbd_callback, GLFWcursorposfun mouse_callback) {
 	/*
 	Init opengl Window.
 	*/
@@ -42,7 +45,11 @@ GLFWwindow* openglInit(string name, int wid, int height, GLFWframebuffersizefun 
 		return NULL;
 	}
 
-	glfwSetFramebufferSizeCallback(window, callback);
+	glfwSetFramebufferSizeCallback(window, kbd_callback);
+	glfwSetCursorPosCallback(window, mouse_callback);
+
+	// tell GLFW to capture our mouse
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	return window;
 }
 
@@ -51,25 +58,43 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	glViewport(0, 0, width, height);
 }
 
-float lerp = 0;
-
 void process_input(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
-	if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-		if (lerp < 1) {
-			lerp += 0.05;
-		}
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+		camera.ProcessKeyboard(FORWARD, deltaTime);
 	}
-	if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		if (lerp > 0)
-		{
-			lerp -= 0.05;
-		}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+		camera.ProcessKeyboard(BACKWARD, deltaTime);
 	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+		camera.ProcessKeyboard(LEFT, deltaTime);
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+		camera.ProcessKeyboard(RIGHT, deltaTime);
+	}
+}
+
+float lastX = 0, lastY = 0;
+bool firstMouse = true;
+void mouse_callback(GLFWwindow* window, double xpos, double ypos) 
+{
+	if (firstMouse) {
+		lastX = xpos;
+		lastY = ypos;
+		firstMouse = false;
+	}
+
+	float xoffset = xpos - lastX;
+	float yoffset = lastY - ypos;
+
+	lastX = xpos;
+	lastY = ypos;
+
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 int main() {
@@ -79,28 +104,31 @@ int main() {
 	GLFWwindow* window = openglInit(
 		"LearnOGL",
 		SCR_WIDTH, SCR_HEIGHT,
-		framebuffer_size_callback);
+		framebuffer_size_callback,
+		mouse_callback);
 
 	Model obj("objs/nanosuit/nanosuit.obj");
 	Shader shader("shaderfile/shader.vs", "shaderfile/shader.fs");
-	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	shader.use();
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	glm::mat4 view = camera.GetViewMatrix();
 	shader.setMat4("projection", projection);
-	shader.setMat4("view", view);
 	glm::mat4 model;
 	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
 	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 	shader.setMat4("model", model);
+	float lastTime = glfwGetTime();
 	while (!glfwWindowShouldClose(window)) 
 	{
+		deltaTime = glfwGetTime() - lastTime;
+		lastTime = glfwGetTime();
 		//Input handle
 		process_input(window);
 		//Render func
 		glEnable(GL_DEPTH_TEST);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glm::mat4 view = camera.GetViewMatrix();
+		shader.setMat4("view", view);
 		obj.Draw(shader);
 
 		//Swap buffer and handle events
