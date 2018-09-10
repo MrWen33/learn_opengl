@@ -116,6 +116,10 @@ int main() {
 	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
 	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
 	shader.setMat4("model", model);
+	shader.setVec3("light.pos", glm::vec3(2));
+	shader.setVec3("light.diffuse", glm::vec3(1));
+	shader.setVec3("light.specular", glm::vec3(2));
+	shader.setVec3("light.ambient", glm::vec3(0.3));
 	float lastTime = glfwGetTime();
 	while (!glfwWindowShouldClose(window)) 
 	{
@@ -129,6 +133,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glm::mat4 view = camera.GetViewMatrix();
 		shader.setMat4("view", view);
+		shader.setVec3("camPos", camera.Position);
 		obj.Draw(shader);
 
 		//Swap buffer and handle events
