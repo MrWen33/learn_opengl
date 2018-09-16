@@ -97,6 +97,22 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
+float quad[] = {
+	// positions   // texCoords
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	-1.0f, -1.0f,  0.0f, 0.0f,
+	1.0f, -1.0f,  1.0f, 0.0f,
+
+	-1.0f,  1.0f,  0.0f, 1.0f,
+	1.0f, -1.0f,  1.0f, 0.0f,
+	1.0f,  1.0f,  1.0f, 1.0f
+};
+
+int indices[] = {
+	1, 3, 2,
+	1, 0, 3
+};
+
 int main() {
 	const unsigned int SCR_WIDTH = 800;
 	const unsigned int SCR_HEIGHT = 600;
@@ -107,9 +123,51 @@ int main() {
 		framebuffer_size_callback,
 		mouse_callback);
 
+	unsigned int scrVAO;
+	glGenVertexArrays(1, &scrVAO);
+	glBindVertexArray(scrVAO);
+	unsigned int scrVBO;
+	glGenBuffers(1, &scrVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, scrVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quad), quad, GL_STATIC_DRAW);
+	unsigned int scrEBO;
+	glGenBuffers(1, &scrEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, scrEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+	glBindVertexArray(0);
+
+	unsigned int fbo;
+	glGenFramebuffers(1, &fbo);
+	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+	unsigned int tex;
+	glGenTextures(1, &tex);
+	glBindTexture(GL_TEXTURE_2D, tex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, SCR_WIDTH, SCR_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+	unsigned int rbo;
+	glGenRenderbuffers(1, &rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	Model obj("objs/nanosuit/nanosuit.obj");
 	Shader shader("shaderfile/shader.vs", "shaderfile/shader.fs");
+	Shader screenShader("shaderfile/screenShader.vs", "shaderfile/screenShader.fs");
 	shader.use();
+	
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	shader.setMat4("projection", projection);
 	glm::mat4 model;
@@ -128,13 +186,27 @@ int main() {
 		//Input handle
 		process_input(window);
 		//Render func
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glEnable(GL_DEPTH_TEST);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glm::mat4 view = camera.GetViewMatrix();
+		shader.use();
 		shader.setMat4("view", view);
 		shader.setVec3("camPos", camera.Position);
 		obj.Draw(shader);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glClearColor(1, 1, 1, 1);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		screenShader.use();
+		screenShader.setInt("screenTex", 0);
+		glBindVertexArray(scrVAO);
+		glDisable(GL_DEPTH_TEST);
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
 		//Swap buffer and handle events
 		glfwSwapBuffers(window);

@@ -76,5 +76,11 @@
     <None Include="shaderfile\lightShader.fs">
       <Filter>源文件</Filter>
     </None>
+    <None Include="shaderfile\screenShader.fs">
+      <Filter>源文件</Filter>
+    </None>
+    <None Include="shaderfile\screenShader.vs">
+      <Filter>源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

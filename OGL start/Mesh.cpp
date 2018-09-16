@@ -16,6 +16,7 @@ Mesh::Mesh(
 
 void Mesh::Draw(Shader & shader)
 {
+	shader.use();
 	unsigned int diffID = 1;
 	unsigned int specID = 1;
 	for (size_t i = 0; i < textures.size(); ++i) {
@@ -57,7 +58,6 @@ void Mesh::setupMesh()
 		indices.size() * sizeof(unsigned int),
 		&indices[0], 
 		GL_STATIC_DRAW);
-
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(
 		0, 3, GL_FLOAT, 

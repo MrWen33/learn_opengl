@@ -35,4 +35,5 @@ void main()
 	vec3 reflect_dir = reflect(light_dir, normal);
 	vec4 spec_light = pow(max(dot(reflect_dir, -view_dir), 0.0), 32) * vec4(light.specular, 1.0) * color;
 	FragColor = ambient_light + diff_light + spec_light;
+
 }
