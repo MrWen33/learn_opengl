@@ -70,12 +70,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>F:\opengllibs\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\opengllibs\Libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\openglDependences\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\openglDependences\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>F:\opengllibs\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>F:\opengllibs\Libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>..\openglDependences\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>..\openglDependences\Libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -146,11 +146,16 @@
     <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaderfile\emptyShader.fs" />
+    <None Include="shaderfile\floorShader.fs" />
+    <None Include="shaderfile\floorShader.vs" />
     <None Include="shaderfile\lightShader.fs" />
     <None Include="shaderfile\screenShader.fs" />
     <None Include="shaderfile\screenShader.vs" />
     <None Include="shaderfile\shader.fs" />
     <None Include="shaderfile\shader.vs" />
+    <None Include="shaderfile\shadowMapShader.vs" />
+    <None Include="shaderfile\showShadowMap.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

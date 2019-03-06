@@ -67,20 +67,35 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaderfile\shader.vs">
-      <Filter>源文件</Filter>
-    </None>
-    <None Include="shaderfile\shader.fs">
-      <Filter>源文件</Filter>
-    </None>
     <None Include="shaderfile\lightShader.fs">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
     </None>
     <None Include="shaderfile\screenShader.fs">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
     </None>
     <None Include="shaderfile\screenShader.vs">
-      <Filter>源文件</Filter>
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\floorShader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\floorShader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\shadowMapShader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\emptyShader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="shaderfile\showShadowMap.fs">
+      <Filter>资源文件</Filter>
     </None>
   </ItemGroup>
 </Project>

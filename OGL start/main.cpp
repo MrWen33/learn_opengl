@@ -113,6 +113,15 @@ int indices[] = {
 	1, 0, 3
 };
 
+
+float box[] = {
+	1.0f, 1.0f, 1.0f,
+};
+
+int boxInd[] = {
+	1
+};
+
 int main() {
 	const unsigned int SCR_WIDTH = 800;
 	const unsigned int SCR_HEIGHT = 600;
@@ -166,18 +175,88 @@ int main() {
 	Model obj("objs/nanosuit/nanosuit.obj");
 	Shader shader("shaderfile/shader.vs", "shaderfile/shader.fs");
 	Shader screenShader("shaderfile/screenShader.vs", "shaderfile/screenShader.fs");
-	shader.use();
+	Shader floorShader("shaderfile/floorShader.vs", "shaderfile/floorShader.fs");
+	Shader shadowMapShader("shaderfile/shadowMapShader.vs", "shaderfile/emptyShader.fs");
+	Shader showShadowMap("shaderfile/screenShader.vs", "shaderfile/showShadowMap.fs");
+	//FLOOR
+	float floorVertexs[] = {
+		10.0, 0.0, 10.0,
+		10.0, 0.0, -10.0,
+		-10.0,0.0,-10.0,
+		-10.0,0.0,10.0
+	};
+	GLuint floorInd[] = {
+		0,1,3,
+		1,2,3
+	};
+	GLuint floorVAO;
+	glGenVertexArrays(1, &floorVAO);
+	glBindVertexArray(floorVAO);
+	GLuint floorVBO;
+	glGenBuffers(1, &floorVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, floorVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(floorVertexs), floorVertexs, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	GLuint floorEBO;
+	glGenBuffers(1, &floorEBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, floorEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(floorInd), floorInd, GL_STATIC_DRAW);
+	glBindVertexArray(0);
+	//FLOOR end
+
+	//ShadowMap
+	const GLuint SHADOW_HEIGHT = 1024, SHADOW_WIDTH = 1024;
+	GLuint shaderMapFBO;
+	glGenFramebuffers(1, &shaderMapFBO);
+	GLuint shaderMapTex;
+	glGenTextures(1, &shaderMapTex);
+	glBindTexture(GL_TEXTURE_2D, shaderMapTex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, shaderMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, shaderMapTex, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//ShadowMap end
+	
+	glm::vec3 lightPos(3);
+	glm::mat4 lightProjection = glm::perspective(glm::radians(90.f), (float)SHADOW_WIDTH / (float)SHADOW_HEIGHT, 0.1f, 100.0f);
+	glm::mat4 lightView = glm::lookAt(lightPos, glm::vec3(0), glm::vec3(0,1,0));
+	glm::mat4 lightSpaceMat = lightProjection * lightView;
 	
 	glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-	shader.setMat4("projection", projection);
 	glm::mat4 model;
 	model = glm::translate(model, glm::vec3(0.0f, -1.75f, 0.0f)); // translate it down so it's at the center of the scene
 	model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-	shader.setMat4("model", model);
-	shader.setVec3("light.pos", glm::vec3(2));
-	shader.setVec3("light.diffuse", glm::vec3(1));
-	shader.setVec3("light.specular", glm::vec3(2));
-	shader.setVec3("light.ambient", glm::vec3(0.3));
+	{
+		shadowMapShader.use();
+		shadowMapShader.setMat4("model", model);
+		shadowMapShader.setMat4("lightSpaceMat", lightSpaceMat);
+		//shadowMapShader.setMat4()
+	}
+	{
+		floorShader.use();
+		floorShader.setMat4("projection", projection);
+		floorShader.setMat4("model", model);
+		floorShader.setVec3("color", glm::vec3(1, 1, 1));
+		floorShader.setMat4("lightSpaceMat", lightSpaceMat);
+	}
+	{
+		shader.use();
+		shader.setMat4("projection", projection);
+		shader.setMat4("model", model);
+		shader.setVec3("light.pos", lightPos);
+		shader.setVec3("light.diffuse", glm::vec3(1));
+		shader.setVec3("light.specular", glm::vec3(2));
+		shader.setVec3("light.ambient", glm::vec3(0.3));
+	}
 	float lastTime = glfwGetTime();
 	while (!glfwWindowShouldClose(window)) 
 	{
@@ -186,20 +265,51 @@ int main() {
 		//Input handle
 		process_input(window);
 		//Render func
-		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glEnable(GL_DEPTH_TEST);
+		glm::mat4 view = camera.GetViewMatrix();
+		//Generate shadow map
+		shadowMapShader.use();
+		
+		//shadowMapShader.setMat4("view", view);
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, shaderMapFBO);
+		{
+			glClear(GL_DEPTH_BUFFER_BIT);
+			glCullFace(GL_FRONT);
+			glBindVertexArray(floorVAO);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			obj.Draw(shadowMapShader);
+			glCullFace(GL_BACK);
+		}
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		//Render scene
+		glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glm::mat4 view = camera.GetViewMatrix();
+		
+		floorShader.use();
+		floorShader.setMat4("view", view);
+		floorShader.setInt("depthMap", 0);
+		glBindTexture(GL_TEXTURE_2D, shaderMapTex);
+		glBindVertexArray(floorVAO);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		
 		shader.use();
 		shader.setMat4("view", view);
 		shader.setVec3("camPos", camera.Position);
 		obj.Draw(shader);
+		
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glClearColor(1, 1, 1, 1);
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		
 		screenShader.use();
 		screenShader.setInt("screenTex", 0);
 		glBindVertexArray(scrVAO);
@@ -207,7 +317,14 @@ int main() {
 		glBindTexture(GL_TEXTURE_2D, tex);
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
-
+		// //œ‘ æ…Ó∂»Õº 
+		//showShadowMap.use();
+		//showShadowMap.setInt("depthMap", 0);
+		//glBindVertexArray(scrVAO);
+		//glDisable(GL_DEPTH_TEST);
+		//glBindTexture(GL_TEXTURE_2D, shaderMapTex);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
+		
 		//Swap buffer and handle events
 		glfwSwapBuffers(window);
 		glfwPollEvents();
