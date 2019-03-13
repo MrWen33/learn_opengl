@@ -13,58 +13,41 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\Public">
+      <UniqueIdentifier>{ef013cfc-f029-4359-bb4d-5618b099ce53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\glad">
+      <UniqueIdentifier>{6daf34a9-1650-4954-b750-098c804de54c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\Public">
+      <UniqueIdentifier>{9c31e354-b649-4c0c-b545-087183db2633}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Shader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="stb_image.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ImgLoader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="utils.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.h">
-      <Filter>头文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Model.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\openglDependences\Src\glad.c">
-      <Filter>源文件</Filter>
+      <Filter>源文件\glad</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="GLExceptions.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Shader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="stb_image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ImgLoader.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="utils.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
+    <ClCompile Include="..\src\ImgLoader.cpp">
+      <Filter>源文件\Public</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Mesh.cpp">
+      <Filter>源文件\Public</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Model.cpp">
+      <Filter>源文件\Public</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Shader.cpp">
+      <Filter>源文件\Public</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\stb_image.cpp">
+      <Filter>源文件\Public</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utils.cpp">
+      <Filter>源文件\Public</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaderfile\lightShader.fs">
@@ -97,5 +80,31 @@
     <None Include="shaderfile\showShadowMap.fs">
       <Filter>资源文件</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Camera.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\GLExceptions.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\ImgLoader.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Mesh.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Model.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Shader.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\stb_image.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\utils.h">
+      <Filter>头文件\Public</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

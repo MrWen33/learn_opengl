@@ -15,6 +15,7 @@
 #include <assimp/postprocess.h>
 #include "Model.h"
 #include"Camera.h"
+
 using std::string;
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
