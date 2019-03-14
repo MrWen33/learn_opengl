@@ -50,38 +50,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaderfile\lightShader.fs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\screenShader.fs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\screenShader.vs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\shader.fs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\shader.vs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\floorShader.fs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\floorShader.vs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\shadowMapShader.vs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\emptyShader.fs">
-      <Filter>资源文件</Filter>
-    </None>
-    <None Include="shaderfile\showShadowMap.fs">
-      <Filter>资源文件</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\include\Camera.h">
       <Filter>头文件\Public</Filter>
     </ClInclude>
@@ -106,5 +74,37 @@
     <ClInclude Include="..\include\utils.h">
       <Filter>头文件\Public</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\asset\shader\emptyShader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\floorShader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\floorShader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\lightShader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\screenShader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\screenShader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\shader.fs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\shader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\shadowMapShader.vs">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="..\asset\shader\showShadowMap.fs">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
 </Project>

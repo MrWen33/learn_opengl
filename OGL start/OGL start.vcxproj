@@ -137,18 +137,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shaderfile\emptyShader.fs" />
-    <None Include="shaderfile\floorShader.fs" />
-    <None Include="shaderfile\floorShader.vs" />
-    <None Include="shaderfile\lightShader.fs" />
-    <None Include="shaderfile\screenShader.fs" />
-    <None Include="shaderfile\screenShader.vs" />
-    <None Include="shaderfile\shader.fs" />
-    <None Include="shaderfile\shader.vs" />
-    <None Include="shaderfile\shadowMapShader.vs" />
-    <None Include="shaderfile\showShadowMap.fs" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\include\Camera.h" />
     <ClInclude Include="..\include\GLExceptions.h" />
     <ClInclude Include="..\include\ImgLoader.h" />
@@ -157,6 +145,18 @@
     <ClInclude Include="..\include\Shader.h" />
     <ClInclude Include="..\include\stb_image.h" />
     <ClInclude Include="..\include\utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\asset\shader\emptyShader.fs" />
+    <None Include="..\asset\shader\floorShader.fs" />
+    <None Include="..\asset\shader\floorShader.vs" />
+    <None Include="..\asset\shader\lightShader.fs" />
+    <None Include="..\asset\shader\screenShader.fs" />
+    <None Include="..\asset\shader\screenShader.vs" />
+    <None Include="..\asset\shader\shader.fs" />
+    <None Include="..\asset\shader\shader.vs" />
+    <None Include="..\asset\shader\shadowMapShader.vs" />
+    <None Include="..\asset\shader\showShadowMap.fs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,6 +22,9 @@
     <Filter Include="源文件\Public">
       <UniqueIdentifier>{8f8cc1e5-e663-4e09-aaa0-ce09902e253d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="资源文件\phone">
+      <UniqueIdentifier>{c417395a-b24a-4526-8d69-6e3a3d4a43fc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Camera.h">
@@ -74,5 +77,13 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\asset\shader\phone\frag.fs">
+      <Filter>资源文件\phone</Filter>
+    </None>
+    <None Include="..\asset\shader\phone\vert.vs">
+      <Filter>资源文件\phone</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -173,12 +173,12 @@ int main() {
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	Model obj("objs/nanosuit/nanosuit.obj");
-	Shader shader("shaderfile/shader.vs", "shaderfile/shader.fs");
-	Shader screenShader("shaderfile/screenShader.vs", "shaderfile/screenShader.fs");
-	Shader floorShader("shaderfile/floorShader.vs", "shaderfile/floorShader.fs");
-	Shader shadowMapShader("shaderfile/shadowMapShader.vs", "shaderfile/emptyShader.fs");
-	Shader showShadowMap("shaderfile/screenShader.vs", "shaderfile/showShadowMap.fs");
+	Model obj("../asset/object/nanosuit/nanosuit.obj");
+	Shader shader("../asset/shader/shader.vs", "../asset/shader/shader.fs");
+	Shader screenShader("../asset/shader/screenShader.vs", "../asset/shader/screenShader.fs");
+	Shader floorShader("../asset/shader/floorShader.vs", "../asset/shader/floorShader.fs");
+	Shader shadowMapShader("../asset/shader/shadowMapShader.vs", "../asset/shader/emptyShader.fs");
+	Shader showShadowMap("../asset/shader/screenShader.vs", "../asset/shader/showShadowMap.fs");
 	//FLOOR
 	float floorVertexs[] = {
 		10.0, 0.0, 10.0,
