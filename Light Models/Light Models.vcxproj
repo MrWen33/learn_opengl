@@ -146,8 +146,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\asset\shader\phone\frag.fs" />
-    <None Include="..\asset\shader\phone\vert.vs" />
+    <None Include="..\asset\shader\phone\frag.frag" />
+    <None Include="..\asset\shader\phone\vert.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

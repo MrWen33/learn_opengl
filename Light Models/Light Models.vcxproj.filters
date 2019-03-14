@@ -79,10 +79,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\asset\shader\phone\frag.fs">
+    <None Include="..\asset\shader\phone\frag.frag">
       <Filter>资源文件\phone</Filter>
     </None>
-    <None Include="..\asset\shader\phone\vert.vs">
+    <None Include="..\asset\shader\phone\vert.vert">
       <Filter>资源文件\phone</Filter>
     </None>
   </ItemGroup>
