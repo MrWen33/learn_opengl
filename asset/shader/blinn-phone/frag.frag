@@ -16,11 +16,11 @@ void main(){
 	
 	vec3 lightDir = normalize(lightPos-fragPos);
 	vec3 viewDir = normalize(camPos-fragPos);
-	vec3 reflectDir = reflect(-lightDir, normal);
+	vec3 halfwayDir = normalize(lightDir+ viewDir);
 	
 	float diffuse = max(dot(normal, lightDir), 0.0);
-	float spec = pow(max(dot(reflectDir, viewDir), 0), shininess);
-	//float spec = 0;
+	float spec = pow(max(dot(halfwayDir, normal), 0), shininess);
 	float brightness = ambient+spec+diffuse;
+	
 	fragColor = brightness*texture(texture1, texCoord);
 }

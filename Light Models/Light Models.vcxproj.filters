@@ -25,6 +25,12 @@
     <Filter Include="资源文件\phone">
       <UniqueIdentifier>{c417395a-b24a-4526-8d69-6e3a3d4a43fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="资源文件\lightSource">
+      <UniqueIdentifier>{51a05fef-9b16-49ea-9422-c5f1a810f811}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="资源文件\blinn-phone">
+      <UniqueIdentifier>{af5d0ce3-25d0-4303-8ad5-1db1d8513795}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Camera.h">
@@ -84,6 +90,18 @@
     </None>
     <None Include="..\asset\shader\phone\vert.vert">
       <Filter>资源文件\phone</Filter>
+    </None>
+    <None Include="..\asset\shader\lightSource\frag.frag">
+      <Filter>资源文件\lightSource</Filter>
+    </None>
+    <None Include="..\asset\shader\lightSource\vert.vert">
+      <Filter>资源文件\lightSource</Filter>
+    </None>
+    <None Include="..\asset\shader\blinn-phone\frag.frag">
+      <Filter>资源文件\blinn-phone</Filter>
+    </None>
+    <None Include="..\asset\shader\blinn-phone\vert.vert">
+      <Filter>资源文件\blinn-phone</Filter>
     </None>
   </ItemGroup>
 </Project>

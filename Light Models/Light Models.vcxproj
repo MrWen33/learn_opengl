@@ -146,6 +146,10 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\asset\shader\blinn-phone\frag.frag" />
+    <None Include="..\asset\shader\blinn-phone\vert.vert" />
+    <None Include="..\asset\shader\lightSource\frag.frag" />
+    <None Include="..\asset\shader\lightSource\vert.vert" />
     <None Include="..\asset\shader\phone\frag.frag" />
     <None Include="..\asset\shader\phone\vert.vert" />
   </ItemGroup>
